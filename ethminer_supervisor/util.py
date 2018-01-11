@@ -20,13 +20,13 @@ stream_handler.setLevel(logging.INFO)
 logger.addHandler(stream_handler)
 
 
-def check():
+def check(delta_seconds=3*60):
     """ Check if the service has a recent active time (within 3 minutes) """
     has_recent = False
     for line in get_ethminer_service_output():
         time = parse_time(line)
         if time:
-            if is_old_time(time):
+            if is_old_time(time, delta_seconds):
                 logger.debug('Found old time {}'.format(time))
             else:
                 logger.debug('Found recent time {}'.format(time))

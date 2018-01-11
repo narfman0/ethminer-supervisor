@@ -64,7 +64,9 @@ def parse_time(line):
     if len(line_segments) > 3:
         try:
             line_date = ' '.join(line_segments[:3])
-            return datetime.strptime(line_date, "%b %d %H:%M:%S")
+            parsed_time = datetime.strptime(line_date, "%b %d %H:%M:%S")
+            parsed_time = parsed_time.replace(year=datetime.now().year)
+            return parsed_time
         except ValueError:
             logger.debug('Line doesnt have a valid time, skipping')
     return None

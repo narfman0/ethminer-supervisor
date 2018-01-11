@@ -18,3 +18,7 @@ def main():
             print('Mocking restart service')
         else:
             restart()
+
+
+if __name__ == "__main__":
+    main()

@@ -29,6 +29,6 @@ class TestSupervisor(unittest.TestCase):
         self.assertEquals(True, response)
 
     def test_cli(self):
-        testargs = ["ethminer_supervisor", "narfman0"]
+        testargs = ["ethminer_supervisor"]
         with patch.object(sys, 'argv', testargs):
             cli.main()

@@ -37,6 +37,11 @@ The command line interface may be used to run manually::
 
     ethminer_supervisor
 
+You can restart the service if only old times were found by passing
+`--restart`::
+
+    ethminer_supervisor --restart
+
 License
 -------
 

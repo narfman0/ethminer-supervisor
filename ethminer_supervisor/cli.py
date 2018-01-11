@@ -1,7 +1,15 @@
 #!/usr/bin/env python
-from ethminer_supervisor.util import check
+import argparse
+
+from ethminer_supervisor.util import check, restart
+
+
+parser = argparse.ArgumentParser(description='Process some integers.')
+parser.add_argument('--restart', '-R', action='store_true')
 
 
 def main():
-    check()
-    print('Ran check')
+    args = parser.parse_args()
+    has_recent = check()
+    if args.restart and not has_recent:
+        restart()

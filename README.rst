@@ -42,6 +42,11 @@ You can restart the service if only old times were found by passing
 
     ethminer_supervisor --restart
 
+`--delta` (default 180) can be used to override the default 'old' time in
+seconds before action is taken to recover the service::
+
+    ethminer_supervisor --restart --delta 60
+
 License
 -------
 

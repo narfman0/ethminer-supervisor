@@ -5,9 +5,9 @@ import logging
 import subprocess
 
 
-SERVICE_CMD = ['service', 'ethminer', 'status']
-SERVICE_STOP = ['service', 'ethminer', 'stop']
-SERVICE_START = ['service', 'ethminer', 'start']
+SERVICE_CMD = 'journalctl -u ethminer --since "{} seconds ago"'
+SERVICE_STOP = 'systemctl stop ethminer'
+SERVICE_START = 'systemctl start ethminer'
 
 
 logger = logging.getLogger(__name__)
@@ -26,7 +26,7 @@ logger.addHandler(stream_handler)
 def check(delta_seconds=3*60):
     """ Check if the service has a recent active time (within 3 minutes) """
     has_recent = False
-    for line in get_ethminer_service_output():
+    for line in get_ethminer_service_output(delta_seconds):
         time = parse_time(line)
         if time:
             if is_old_time(time, delta_seconds):
@@ -44,15 +44,16 @@ def check(delta_seconds=3*60):
 def restart():
     """ Restart ethminer service - stop, one 1 second, start """
     logger.info('Restarting ethminer...')
-    subprocess.Popen(SERVICE_STOP, shell=True)
+    subprocess.Popen([SERVICE_STOP, ], shell=True)
     sleep(1)
-    subprocess.Popen(SERVICE_START, shell=True)
+    subprocess.Popen([SERVICE_START, ], shell=True)
     logger.info('Ethminer restarted')
 
 
-def get_ethminer_service_output():
+def get_ethminer_service_output(delta_seconds):
     """ Get output line by line, including date, time, and output """
-    proc = subprocess.Popen(SERVICE_CMD, stdout=subprocess.PIPE, shell=True)
+    command = SERVICE_CMD.format(delta_seconds)
+    proc = subprocess.Popen([command, ], stdout=subprocess.PIPE, shell=True)
     while True:
         line = proc.stdout.readline()
         if line:
@@ -75,6 +76,6 @@ def parse_time(line):
     return None
 
 
-def is_old_time(time, delta_seconds=60*3):
+def is_old_time(time, delta_seconds):
     """ Check if time is greater than some delta, default 3 minutes """
     return (datetime.now() - time).total_seconds() > delta_seconds

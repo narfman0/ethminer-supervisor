@@ -9,7 +9,7 @@ ethminer-supervisor
 .. image:: https://img.shields.io/travis/narfman0/ethminer-supervisor.svg
         :target: https://travis-ci.org/narfman0/ethminer-supervisor
 
-WIP Supervise ethminer daemon and restart process or machine when appropriate.
+Supervise ethminer daemon and restart process or machine when appropriate.
 
 This assumes ethminer was set up using ansible-ethminer, where systemd manages
 the ethminer.service process. This is required, since this is based on parsing
@@ -19,7 +19,7 @@ Features
 --------
 
 * Restart process when process gets stuck
-* Restart machine when graphics driver fails
+* Restart machine when graphics driver fails (WIP, currently I restart nightly)
 
 Usage
 -----

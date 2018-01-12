@@ -18,7 +18,7 @@ test_requirements = [
 
 setup(
     name='ethminer_supervisor',
-    version='1.0.3',
+    version='1.0.4',
     description="Supervise ethminer daemon and restart process or machine when appropriate",
     long_description=readme,
     author="Jon Robison",

@@ -44,15 +44,15 @@ def check(delta_seconds=3*60):
 def restart():
     """ Restart ethminer service - stop, one 1 second, start """
     logger.info('Restarting ethminer...')
-    subprocess.Popen(SERVICE_STOP)
+    subprocess.Popen(SERVICE_STOP, shell=True)
     sleep(1)
-    subprocess.Popen(SERVICE_START)
+    subprocess.Popen(SERVICE_START, shell=True)
     logger.info('Ethminer restarted')
 
 
 def get_ethminer_service_output():
     """ Get output line by line, including date, time, and output """
-    proc = subprocess.Popen(SERVICE_CMD, stdout=subprocess.PIPE)
+    proc = subprocess.Popen(SERVICE_CMD, stdout=subprocess.PIPE, shell=True)
     while True:
         line = proc.stdout.readline()
         if line:

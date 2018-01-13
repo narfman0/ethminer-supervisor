@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from time import sleep
-import logging
 import subprocess
+import logging
 
 
 SERVICE_CMD = 'journalctl -u ethminer --since "{} seconds ago"'
@@ -11,16 +11,6 @@ SERVICE_START = 'systemctl start ethminer'
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-file_handler = logging.FileHandler('ethminer_supervisor.log')
-file_handler.setLevel(logging.DEBUG)
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
-stream_handler = logging.StreamHandler()
-stream_handler.setLevel(logging.INFO)
-stream_handler.setFormatter(formatter)
-logger.addHandler(stream_handler)
 
 
 def check(delta_seconds=3*60):
@@ -64,10 +54,10 @@ def get_ethminer_service_output(delta_seconds):
 
 def parse_time(line):
     """ Parse systemd time format to python date """
-    line_segments = line.split(' ')
+    line_segments = line.split()
     if len(line_segments) > 3:
         try:
-            line_date = ' '.join(line_segments[:3])
+            line_date = b' '.join(line_segments[:3]).decode()
             parsed_time = datetime.strptime(line_date, "%b %d %H:%M:%S")
             parsed_time = parsed_time.replace(year=datetime.now().year)
             return parsed_time
@@ -79,3 +69,11 @@ def parse_time(line):
 def is_old_time(time, delta_seconds):
     """ Check if time is greater than some delta, default 3 minutes """
     return (datetime.now() - time).total_seconds() > delta_seconds
+
+
+def configure_logging(path="ethminer_supervisor.log", level=logging.INFO):
+    logging.basicConfig(
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            level=level,
+            filename=path,
+    )
